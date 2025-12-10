@@ -62,7 +62,7 @@
 /* 空闲任务使用的栈大小 */
 #define configMINIMAL_STACK_SIZE                ( ( uint16_t ) 128 )
 /* FreeRTOS堆中可用的RAM的总量，单位是字节，只有使用动态内存分配，并添加内存的分配方案时，时这个值才会被启用 */
-#define configTOTAL_HEAP_SIZE                   ( ( size_t ) ( 5 * 1024 ) )
+#define configTOTAL_HEAP_SIZE                   ( ( size_t ) ( 10 * 1024 ) )
 /* 设置任务名字的最大长度，包括的字符串的终止符\0 */
 #define configMAX_TASK_NAME_LEN                 ( 16 )
 /* 用于任务跟踪 */

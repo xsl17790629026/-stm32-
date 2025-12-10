@@ -2,6 +2,7 @@
 "smart_garage\startup_stm32f103xb.o"
 "smart_garage\main.o"
 "smart_garage\gpio.o"
+"smart_garage\tim.o"
 "smart_garage\usart.o"
 "smart_garage\stm32f1xx_it.o"
 "smart_garage\stm32f1xx_hal_msp.o"
@@ -9,7 +10,6 @@
 "smart_garage\stm32f1xx_hal_gpio_ex.o"
 "smart_garage\stm32f1xx_hal_tim.o"
 "smart_garage\stm32f1xx_hal_tim_ex.o"
-"smart_garage\stm32f1xx_hal_uart.o"
 "smart_garage\stm32f1xx_hal.o"
 "smart_garage\stm32f1xx_hal_rcc.o"
 "smart_garage\stm32f1xx_hal_rcc_ex.o"
@@ -20,6 +20,7 @@
 "smart_garage\stm32f1xx_hal_flash.o"
 "smart_garage\stm32f1xx_hal_flash_ex.o"
 "smart_garage\stm32f1xx_hal_exti.o"
+"smart_garage\stm32f1xx_hal_uart.o"
 "smart_garage\system_stm32f1xx.o"
 "smart_garage\croutine.o"
 "smart_garage\event_groups.o"
@@ -34,6 +35,8 @@
 "smart_garage\oled.o"
 "smart_garage\oled_data.o"
 "smart_garage\led.o"
+"smart_garage\infrared.o"
+"smart_garage\servo.o"
 --library_type=microlib --strict --scatter "Smart_Garage\Smart_Garage.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
