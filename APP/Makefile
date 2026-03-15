@@ -1,66 +1,84 @@
-# Makefile for Smart Garage Application Unit Tests
-# Usage: make test
+# 交叉编译器前缀
+PREFIX ?= arm-none-eabi-
 
-CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 -g -O0 -DUNIT_TEST
-TARGET = test_app
-SOURCE = test_app.c
-INCLUDES = -I.
+CC = $(PREFIX)gcc
+LD = $(PREFIX)ld
+OBJCOPY = $(PREFIX)objcopy
+SIZE = $(PREFIX)size
 
-# Mock FreeRTOS and HAL headers
-MOCK_DEFS = -DUNIT_TEST
+# 目标文件
+TARGET = app
 
-# Default target
-all: $(TARGET)
+# 源文件
+SRCS = app.c \
+       flash_storage.c \
+       stm32_hal_msp.c \
+       stm32_it.c \
+       main.c \
+       freertos.c \
+       $(wildcard *.c)
 
-# Build the test executable
-$(TARGET): $(SOURCE)
-	$(CC) $(CFLAGS) $(INCLUDES) $(MOCK_DEFS) -o $(TARGET) $(SOURCE)
+# 头文件目录
+INCLUDES = -I./Inc \
+           -I./ \
+           -I./Middlewares/Third_Party/FreeRTOS/Source/include \
+           -I./Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS \
+           -I./Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 \
+           -I./Drivers/CMSIS/Include \
+           -I./Drivers/CMSIS/Device/ST/STM32F1xx/Include \
+           -I./Drivers/STM32F1xx_HAL_Driver/Inc
 
-# Run tests
-test: $(TARGET)
-	@echo "Running Smart Garage Unit Tests..."
-	@echo "=================================="
-	./$(TARGET)
-	@echo ""
-	@echo "Test execution completed."
+# 预处理器定义
+DEFS = -DUSE_HAL_DRIVER -DSTM32F103xB
 
-# Run tests with verbose output
-test-verbose: $(TARGET)
-	@echo "Running Smart Garage Unit Tests (Verbose)..."
-	@echo "============================================"
-	./$(TARGET) 2>&1 | tee test_results.log
-	@echo ""
-	@echo "Test results saved to test_results.log"
+# 编译选项
+CFLAGS = -mcpu=cortex-m3 -mthumb -mlittle-endian -mfix-cortex-m3-ldrd
+CFLAGS += -ffunction-sections -fdata-sections -fsingle-precision-constant -Wdouble-promotion
+CFLAGS += -Os -flto
+CFLAGS += $(INCLUDES) $(DEFS)
 
-# Check memory leaks (requires valgrind)
-test-memory: $(TARGET)
-	@echo "Running memory leak detection..."
-	@echo "================================"
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TARGET)
+# 链接选项
+LDFLAGS = -mcpu=cortex-m3 -mthumb -Wl,-Map=$(TARGET).map,--cref -Wl,--gc-sections
 
-# Generate coverage report (requires gcov)
-coverage: CFLAGS += --coverage
-coverage: clean $(TARGET)
-	@echo "Running tests with coverage..."
-	./$(TARGET)
-	@echo "Generating coverage report..."
-	gcov $(SOURCE)
-	@echo "Coverage report generated: $(SOURCE).gcov"
+# 库文件
+LIBS = -lc -lm -lnosys
 
-# Clean build artifacts
+# 目标
+.PHONY: all clean size
+
+all: $(TARGET).bin size
+
+# 编译规则
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# 链接
+$(TARGET).elf: $(SRCS:.c=.o)
+	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS)
+
+# 生成二进制文件
+%.bin: %.elf
+	$(OBJCOPY) -O binary $< $@
+	@echo "生成 $@ 完成!"
+
+# 显示尺寸信息
+size: $(TARGET).elf
+	$(SIZE) $<
+
+# 清理
 clean:
-	rm -f $(TARGET) *.o *.gcov *.gcda *.gcno test_results.log
+	rm -f *.o *.elf *.bin *.map
 
-# Help target
-help:
-	@echo "Available targets:"
-	@echo "  all         - Build the test executable"
-	@echo "  test        - Run the unit tests"
-	@echo "  test-verbose- Run tests with verbose output"
-	@echo "  test-memory - Run tests with memory leak detection"
-	@echo "  coverage    - Run tests with coverage analysis"
-	@echo "  clean       - Clean build artifacts"
-	@echo "  help        - Show this help message"
+# 测试目标
+test:
+	@echo "运行单元测试..."
+	gcc -o test_runner test_app.c -DTESTING
+	./test_runner
+	@echo "测试结果保存到 test_results.log"
 
-.PHONY: all test test-verbose test-memory coverage clean help
+# 集成测试
+integration_test:
+	@echo "运行集成测试..."
+	gcc -o integration_test_runner test_integration.c -DTESTING
+	./integration_test_runner
+	@echo "集成测试完成!"

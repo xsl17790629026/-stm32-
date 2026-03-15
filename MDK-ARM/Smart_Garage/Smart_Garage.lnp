@@ -32,6 +32,7 @@
 "smart_garage\heap_4.o"
 "smart_garage\port.o"
 "smart_garage\app.o"
+"smart_garage\flash_storage.o"
 "smart_garage\oled.o"
 "smart_garage\oled_data.o"
 "smart_garage\led.o"

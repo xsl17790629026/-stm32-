@@ -736,6 +736,11 @@
               <FileType>5</FileType>
               <FilePath>..\FreeRTOS\FreeRTOSConfig.h</FilePath>
             </File>
+            <File>
+              <FileName>flash_storage.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\flash_storage.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

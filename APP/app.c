@@ -11,12 +11,12 @@
 #include "infrared.h"
 #include "queue.h"
 #include "semphr.h"
+#include "flash_storage.h"  
 
 #define UART_BUF_SIZE 128
 #define FRAME_HEAD1 '#'
 #define FRAME_HEAD2 '@'
 #define FRAME_TAIL  '*'
-#define MAX_VEHICLES 50
 #define NO_VEHICLE 1
 
 extern UART_HandleTypeDef huart1;
@@ -31,14 +31,6 @@ int fputc(int ch, FILE *f)
 	HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xffffff);
 	return ch;
 }
-
-typedef struct{
-    char plate_num[16];
-    uint16_t balance;
-}VehicleInfo_t;
-
-VehicleInfo_t g_vehicle_db[MAX_VEHICLES];
-int g_vehicle_count = 0;
 
 typedef struct {
     uint8_t buf[UART_BUF_SIZE];
