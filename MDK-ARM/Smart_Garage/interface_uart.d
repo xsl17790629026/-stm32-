@@ -1,16 +1,5 @@
-smart_garage/app.o: ../APP/Src/app.c \
-  ../FreeRTOS/Source/include\freertos.h \
-  D:\stm32\ARM\ARMCLANG\Bin\..\include\stddef.h \
-  D:\stm32\ARM\ARMCLANG\Bin\..\include\stdint.h \
-  ../FreeRTOS\FreeRTOSConfig.h \
-  D:\stm32\ARM\ARMCLANG\Bin\..\include\stdio.h \
-  ../FreeRTOS/Source/include/projdefs.h \
-  ../FreeRTOS/Source/include/portable.h \
-  ../FreeRTOS/Source/include/deprecated_definitions.h \
-  ../FreeRTOS/Source/portable/GCC/ARM_CM3\portmacro.h \
-  ../FreeRTOS/Source/include/mpu_wrappers.h \
-  ../FreeRTOS/Source/include\task.h ../FreeRTOS/Source/include/list.h \
-  ../APP/Inc\app.h ../Core/Inc\main.h \
+smart_garage/interface_uart.o: ../MidInterface/Src/interface_uart.c \
+  ../MidInterface/Inc\interface_uart.h ../Core/Inc\main.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal.h \
   ../Core/Inc\stm32f1xx_hal_conf.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_rcc.h \
@@ -18,12 +7,14 @@ smart_garage/app.o: ../APP/Src/app.c \
   ../Drivers/CMSIS/Device/ST/STM32F1xx/Include\stm32f1xx.h \
   ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h \
   ../Drivers/CMSIS/Include\core_cm3.h \
+  D:\stm32\ARM\ARMCLANG\Bin\..\include\stdint.h \
   ../Drivers/CMSIS/Include/cmsis_version.h \
   ../Drivers/CMSIS/Include/cmsis_compiler.h \
   ../Drivers/CMSIS/Include/cmsis_armclang.h \
   D:\stm32\ARM\ARMCLANG\Bin\..\include\arm_compat.h \
   D:\stm32\ARM\ARMCLANG\Bin\..\include\arm_acle.h \
   ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h \
+  D:\stm32\ARM\ARMCLANG\Bin\..\include\stddef.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc_ex.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_gpio.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio_ex.h \
@@ -37,10 +28,6 @@ smart_garage/app.o: ../APP/Src/app.c \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_tim.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_uart.h \
-  D:\stm32\ARM\ARMCLANG\Bin\..\include\string.h ../Peripheral/Inc\OLED.h \
-  ../Peripheral/Inc/OLED_Data.h ../Peripheral/Inc\led.h \
-  D:\stm32\ARM\ARMCLANG\Bin\..\include\stdlib.h \
-  ../Peripheral/Inc\servo.h ../Peripheral/Inc\infrared.h \
-  ../FreeRTOS/Source/include\queue.h ../FreeRTOS/Source/include\semphr.h \
-  ../APP/Inc\flash_storage.h ../CommonTool/Inc\RingBuffer.h \
-  ../APP/Inc\vehicle_info_update.h ../MidInterface/Inc\interface_uart.h
+  ../CommonTool/Inc\RingBuffer.h \
+  D:\stm32\ARM\ARMCLANG\Bin\..\include\stdio.h \
+  D:\stm32\ARM\ARMCLANG\Bin\..\include\string.h

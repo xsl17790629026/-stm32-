@@ -1,5 +1,5 @@
-smart_garage/flash_storage.o: ../APP/flash_storage.c \
-  ../APP/flash_storage.h ../Core/Inc\main.h \
+smart_garage/flash_storage.o: ../APP/Src/flash_storage.c \
+  ../APP/Inc\flash_storage.h ../Core/Inc\main.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal.h \
   ../Core/Inc\stm32f1xx_hal_conf.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_rcc.h \
@@ -27,5 +27,5 @@ smart_garage/flash_storage.o: ../APP/flash_storage.c \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_pwr.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_tim.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
-  ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_uart.h ../APP/app.h \
-  D:\stm32\ARM\ARMCLANG\Bin\..\include\string.h
+  ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_uart.h \
+  ../APP/Inc/app.h D:\stm32\ARM\ARMCLANG\Bin\..\include\string.h

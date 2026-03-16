@@ -15,7 +15,7 @@ typedef struct {
 #define MAX_VEHICLES 50
 
 // Flash页大小（根据具体MCU调整）
-#define FLASH_PAGE_SIZE 2048  // 例如STM32F103为1K，F4为2K
+#define FLASH_PAGE_SIZE 1024  // 例如STM32F103为1K，F4为2K
 
 // 计算所需Flash空间
 #define VEHICLE_DATA_SIZE sizeof(VehicleInfo_t) * MAX_VEHICLES

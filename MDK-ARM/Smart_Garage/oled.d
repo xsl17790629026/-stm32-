@@ -1,4 +1,4 @@
-smart_garage/oled.o: ../HardWare/OLED.c ../Core/Inc\main.h \
+smart_garage/oled.o: ../Peripheral/Src/OLED.c ../Core/Inc\main.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal.h \
   ../Core/Inc\stm32f1xx_hal_conf.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_rcc.h \
@@ -27,7 +27,7 @@ smart_garage/oled.o: ../HardWare/OLED.c ../Core/Inc\main.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_tim.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_uart.h \
-  ../HardWare/OLED.h ../HardWare/OLED_Data.h \
+  ../Peripheral/Inc\OLED.h ../Peripheral/Inc/OLED_Data.h \
   D:\stm32\ARM\ARMCLANG\Bin\..\include\string.h \
   D:\stm32\ARM\ARMCLANG\Bin\..\include\math.h \
   D:\stm32\ARM\ARMCLANG\Bin\..\include\stdio.h \

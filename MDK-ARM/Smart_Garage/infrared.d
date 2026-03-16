@@ -1,5 +1,6 @@
-smart_garage/infrared.o: ../HardWare/infrared.c ../HardWare/infrared.h \
-  ../Core/Inc\main.h ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal.h \
+smart_garage/infrared.o: ../Peripheral/Src/infrared.c \
+  ../Peripheral/Inc\infrared.h ../Core/Inc\main.h \
+  ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal.h \
   ../Core/Inc\stm32f1xx_hal_conf.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_rcc.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h \

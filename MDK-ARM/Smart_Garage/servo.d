@@ -1,4 +1,4 @@
-smart_garage/servo.o: ../HardWare/servo.c ../HardWare/servo.h \
+smart_garage/servo.o: ../Peripheral/Src/servo.c ../Peripheral/Inc\servo.h \
   ../Core/Inc\main.h ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal.h \
   ../Core/Inc\stm32f1xx_hal_conf.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_rcc.h \
