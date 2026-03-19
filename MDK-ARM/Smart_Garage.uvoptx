@@ -157,66 +157,50 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>8</LineNumber>
+          <LineNumber>27</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134239728</Address>
+          <Address>134219992</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\CommonTool\Src\RingBuffer.c</Filename>
+          <Filename>..\APP\Src\vehicle_info_update.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Smart_Garage\../CommonTool/Src/RingBuffer.c\8</Expression>
+          <Expression>\\Smart_Garage\../APP/Src/vehicle_info_update.c\27</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>9</LineNumber>
+          <LineNumber>116</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134239740</Address>
+          <Address>134236698</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\CommonTool\Src\RingBuffer.c</Filename>
+          <Filename>..\APP\Src\app.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Smart_Garage\../CommonTool/Src/RingBuffer.c\9</Expression>
+          <Expression>\\Smart_Garage\../APP/Src/app.c\116</Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>19</LineNumber>
+          <LineNumber>264</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134239640</Address>
+          <Address>134236138</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\CommonTool\Src\RingBuffer.c</Filename>
+          <Filename>..\APP\Src\app.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Smart_Garage\../CommonTool/Src/RingBuffer.c\19</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>90</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134228222</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\MidInterface\Src\interface_uart.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Smart_Garage\../MidInterface/Src/interface_uart.c\90</Expression>
+          <Expression>\\Smart_Garage\../APP/Src/app.c\264</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>

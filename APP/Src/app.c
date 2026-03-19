@@ -26,6 +26,14 @@ volatile uint8_t vehicle_flag = 1;
 
 uint8_t g_plate_number_buf[32];
 
+
+int fputc(int ch, FILE *f)
+{
+	HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xffffff);
+	return ch;
+}
+
+
 /**
  * @brief UART 接收任务
  * @details 循环读取 UART 接收缓冲区数据，解析后存储到全局车牌号缓冲区
@@ -115,6 +123,8 @@ void oled_task()
     static uint8_t Empty_place = 50;
     int vehicle_idx = -1;
 
+    flash_storage_init();
+
     OLED_Init();
     OLED_Clear();
 
@@ -173,8 +183,9 @@ void oled_task()
                     // 显示充值成功的消息
                     OLED_ShowString(0, 48, "Recharge Success", OLED_8X16);
                 }
+                sync_all_vehicles_to_flash();
             }
-            // ================== 充值处理 2：识别车牌号指令 (不包含"cz") ==================
+            // ================== 扣费开门处理 2：识别车牌号指令 (不包含"cz") ==================
             else
             {
                 vehicle_idx = Find_Vehicle(current_plate);
@@ -216,6 +227,7 @@ void oled_task()
                     Yellow_LED_On(); // 闪烁
                     OLED_ShowString(0, 48, "Need Recharge!  ", OLED_8X16);
                 }
+                sync_all_vehicles_to_flash();
             }
 
             // ================== 统计刷新显示 ==================
@@ -231,16 +243,34 @@ void oled_task()
         vTaskDelay(10);
     }
 }
+
+void flash_storage_task()
+{
+    flash_storage_init();
+    while(1)
+    {
+        if(g_flash_write_addr >= FLASH_STORAGE_END_ADDR)
+        {
+            erase_vehicle_data_in_flash();
+        }
+        vTaskDelay(100); // 每 10 秒保存一次数据到 Flash
+    }
+}
+
 /* 应用程序入口启动初始化 */
 void app_init(void)
 {
     xInfraredQueue = xQueueCreate(10, sizeof(uint8_t));
     xVehicleSemaphore = xSemaphoreCreateBinary();
+		
+    // HAL_UART_Transmit(&huart1, (uint8_t *)"hello\r\n", 7, 0xFFFF);
+    // printf("flash init start\r\n");
 
     xTaskCreate(led_task, "led_task", 128, NULL, 1, NULL);
     xTaskCreate(uart_task, "uart_task", 128, NULL, 3, NULL);
     xTaskCreate(oled_task, "oled_task", 512, NULL, 1, NULL);
     xTaskCreate(servo_task, "servo_task", 128, NULL, 2, NULL);
     xTaskCreate(infrared_task, "infrared_task", 128, NULL, 1, NULL);
+    //xTaskCreate(flash_storage_task, "flash_storage_task", 128, NULL, 1, NULL);
     vTaskStartScheduler();
 }

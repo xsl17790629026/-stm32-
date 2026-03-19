@@ -28,4 +28,5 @@ smart_garage/flash_storage.o: ../APP/Src/flash_storage.c \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_tim.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_uart.h \
-  ../APP/Inc/app.h D:\stm32\ARM\ARMCLANG\Bin\..\include\string.h
+  ../APP/Inc/app.h D:\stm32\ARM\ARMCLANG\Bin\..\include\string.h \
+  ../Core/Inc\usart.h D:\stm32\ARM\ARMCLANG\Bin\..\include\stdio.h

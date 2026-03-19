@@ -23,6 +23,8 @@ int Add_Vehicle(const char *plate)
     g_vehicle_db[g_vehicle_count].plate_num[sizeof(g_vehicle_db[g_vehicle_count].plate_num) - 1] = '\0'; // 确保字符串以null结尾
     // 新车默认余额为0
     g_vehicle_db[g_vehicle_count].balance = 0; // 初始化余额
+		
+    // sync_all_vehicles_to_flash(); // 每次添加新车后同步到 Flash 中，确保数据持久化
 
     // // 如果是测试用的特权车牌，可以初始化送点钱方便测试
     // if(strcmp(plate, "B88888") == 0) {

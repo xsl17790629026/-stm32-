@@ -10,10 +10,10 @@ typedef struct {
     uint16_t read;
 } ring_buf_t;
 
-// å†™å‡½æ•°
+/* Ğ´Èëº¯Êı */
 void ring_write(ring_buf_t *rb, uint8_t data);
 
-// è¯»å–å‡½æ•°
+/* ¶ÁÈ¡º¯Êı */
 int ring_read(ring_buf_t *rb, uint8_t *data);
 
 #endif /* __RINGBUFFER_H__ */
