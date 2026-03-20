@@ -60,54 +60,54 @@ uint8_t flash_storage_init(void)
  * @brief 保存车辆数据到 Flash
  * @retval uint8_t 0-成功 1-失败
  */
-uint8_t save_one_vehicle_to_flash(VehicleInfo_t *vehicle)
-{
-    if(g_vehicle_count >= MAX_VEHICLES) return 1;
+// uint8_t save_one_vehicle_to_flash(VehicleInfo_t *vehicle)
+// {
+//     if(g_vehicle_count >= MAX_VEHICLES) return 1;
 
-    vehicle->valid = 1;
+//     vehicle->valid = 1;
 
-    // 1. 使用局部变量，防止操作失败导致全局地址污染
-    uint32_t current_addr = g_flash_write_addr; 
+//     // 1. 使用局部变量，防止操作失败导致全局地址污染
+//     uint32_t current_addr = g_flash_write_addr; 
     
-    // 2. 准备缓冲区，解决非4字节对齐的非法内存读取问题
-    // 确保写入 Flash 的总是一个完整的 Word 数组
-    uint32_t write_buf[sizeof(VehicleInfo_t) / 4 + 1] = {0};
-    memcpy(write_buf, vehicle, sizeof(VehicleInfo_t));
-    uint32_t words = (sizeof(VehicleInfo_t) + 3) / 4; 
+//     // 2. 准备缓冲区，解决非4字节对齐的非法内存读取问题
+//     // 确保写入 Flash 的总是一个完整的 Word 数组
+//     uint32_t write_buf[sizeof(VehicleInfo_t) / 4 + 1] = {0};
+//     memcpy(write_buf, vehicle, sizeof(VehicleInfo_t));
+//     uint32_t words = (sizeof(VehicleInfo_t) + 3) / 4; 
 
-    HAL_FLASH_Unlock();
-    __disable_irq();
+//     HAL_FLASH_Unlock();
+//     __disable_irq();
 
-    for(uint32_t i = 0; i < words; i++)
-    {
-        // 检查 Flash 是否为空 (0xFFFFFFFF)
-        if(*(uint32_t*)current_addr != 0xFFFFFFFF)
-        {
-            goto ERROR_EXIT; // 发现不为空，说明没擦除干净或空间被占
-        }
+//     for(uint32_t i = 0; i < words; i++)
+//     {
+//         // 检查 Flash 是否为空 (0xFFFFFFFF)
+//         if(*(uint32_t*)current_addr != 0xFFFFFFFF)
+//         {
+//             goto ERROR_EXIT; // 发现不为空，说明没擦除干净或空间被占
+//         }
 
-        if(HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, current_addr, write_buf[i]) != HAL_OK)
-        {
-            goto ERROR_EXIT;
-        }
-        current_addr += 4;
-    }
+//         if(HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, current_addr, write_buf[i]) != HAL_OK)
+//         {
+//             goto ERROR_EXIT;
+//         }
+//         current_addr += 4;
+//     }
 
-    __enable_irq();
-    HAL_FLASH_Lock();
+//     __enable_irq();
+//     HAL_FLASH_Lock();
 
-    // 3. 只有全部写入成功，才更新全局状态
-    g_flash_write_addr = current_addr; 
-    memcpy(&g_vehicle_db[g_vehicle_count], vehicle, sizeof(VehicleInfo_t));
-    g_vehicle_count++;
+//     // 3. 只有全部写入成功，才更新全局状态
+//     g_flash_write_addr = current_addr; 
+//     memcpy(&g_vehicle_db[g_vehicle_count], vehicle, sizeof(VehicleInfo_t));
+//     g_vehicle_count++;
 
-    return 0;
+//     return 0;
 
-ERROR_EXIT:
-    __enable_irq();
-    HAL_FLASH_Lock();
-    return 1;
-}
+// ERROR_EXIT:
+//     __enable_irq();
+//     HAL_FLASH_Lock();
+//     return 1;
+// }
 
 uint8_t sync_all_vehicles_to_flash(void)
 {
@@ -157,56 +157,42 @@ uint8_t sync_all_vehicles_to_flash(void)
     return (status == HAL_OK) ? 0 : 1;
 }
 
-// uint8_t save_one_vehicle_to_flash(VehicleInfo_t *vehicle)
-// {
-//     if(g_vehicle_count >= MAX_VEHICLES)
-//     {
-//         return 1;
-//     }
+uint8_t all_vehicles_to_flash(void)
+{
+    FLASH_EraseInitTypeDef EraseInitStruct;
+    uint32_t PageError;
+    HAL_StatusTypeDef status;
 
-//     vehicle->valid = 1;
+    // 1. 解锁 Flash
+    HAL_FLASH_Unlock();
 
-//     __disable_irq();// 关闭中断，确保写入过程不被打断
+    // 3. 循环写入整个数组
+    uint32_t current_addr = FLASH_STORAGE_START_ADDR;
+    
+    // 关中断防止写入过程被干扰
+    __disable_irq();
 
-//     HAL_FLASH_Unlock();
+    for (uint8_t i = 0; i < g_vehicle_count; i++) 
+    {
+        // 标记为有效
+        g_vehicle_db[i].valid = 1;
+        
+        // 将结构体拆分为 Word 写入 (20字节 = 5个 Word)
+        uint32_t *pData = (uint32_t*)&g_vehicle_db[i];
+        for (uint8_t j = 0; j < (sizeof(VehicleInfo_t)+3) / 4; j++) 
+        {
+            status = HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, current_addr, pData[j]);
+            if (status != HAL_OK) break;
+            current_addr += 4;
+        }
+        if (status != HAL_OK) break;
+    }
 
-//     uint32_t *data = (uint32_t*)vehicle;
-//     uint32_t words = sizeof(VehicleInfo_t) / 4;
+    __enable_irq();
+    HAL_FLASH_Lock();
 
-//     if(sizeof(VehicleInfo_t) % 4 != 0)
-//     {
-//         words++;
-//     }
-
-//     for(uint32_t i = 0; i < words; i++)
-//     {
-//         if(*(uint32_t*)g_flash_write_addr != 0xFFFFFFFF)
-//         {
-//             HAL_FLASH_Lock();
-//             __enable_irq();
-//             return 1;
-//         }
-
-//         if(HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD,
-//                              g_flash_write_addr,
-//                              data[i]) != HAL_OK)
-//         {
-//             HAL_FLASH_Lock();
-//             return 1;
-//         }
-
-//         g_flash_write_addr += 4;
-//     }
-
-//     HAL_FLASH_Lock();
-
-//     __enable_irq();// 恢复中断
-
-//     memcpy(&g_vehicle_db[g_vehicle_count], vehicle, sizeof(VehicleInfo_t));
-//     g_vehicle_count++;
-
-//     return 0;
-// }
+    return (status == HAL_OK) ? 0 : 1;
+}
 
 /**
  * @brief 从 Flash 读取车辆数据
@@ -272,7 +258,7 @@ uint8_t erase_vehicle_data_in_flash(void)
     // 擦除 Flash 页
     erase_init_struct.TypeErase = FLASH_TYPEERASE_PAGES;
     erase_init_struct.PageAddress = FLASH_STORAGE_START_ADDR;
-    erase_init_struct.NbPages = NUM_PAGES_NEEDED;
+    erase_init_struct.NbPages = 1;
     
     if(HAL_FLASHEx_Erase(&erase_init_struct, &page_error) != HAL_OK)
     {
@@ -283,8 +269,6 @@ uint8_t erase_vehicle_data_in_flash(void)
     // 锁定 Flash
     HAL_FLASH_Lock();
     
-    // 清除 RAM 中的数据
-    memset(g_vehicle_db, 0, sizeof(g_vehicle_db));
     g_vehicle_count = 0;
     
     return 0; // 成功

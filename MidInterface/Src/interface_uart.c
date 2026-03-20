@@ -54,7 +54,9 @@ void uart_get_data(uint8_t *g_plate_number_buf)
             case WAIT_DATA:
                 if (data == FRAME_TAIL)
                 { 
-                    HAL_UART_Transmit(&huart1, data_buf, data_count, 100);
+                    
+                    printf("Received data: %s\r\n", data_buf);
+                    // HAL_UART_Transmit(&huart1, data_buf, data_count, 100);
                     data_buf[data_count] = '\0';
 
                     memcpy(g_plate_number_buf, data_buf, data_count + 1); // +1 ÓÃÓÚ¿½±´×Ö·û´®½áÊø·û '\0'

@@ -3,6 +3,10 @@
 
 #include "main.h"
 
-uint8_t Read_Infrared_State();
+typedef enum{
+    CGQ1 = 0,
+    CGQ2 = 1,
+}CGQ_TYPE;
+uint8_t Read_Infrared_State(CGQ_TYPE type);
 
 #endif

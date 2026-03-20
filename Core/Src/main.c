@@ -25,6 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "app.h"
+// #include "flash_storage.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -39,7 +40,24 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+// void PVD_Config(void) {
+//     PWR_PVDTypeDef sConfigPVD;
 
+//     // 1. 使能电源时钟
+//     __HAL_RCC_PWR_CLK_ENABLE();
+
+//     // 2. 配置 PVD 级别 (Level 7 约为 2.9V)
+//     sConfigPVD.PVDLevel = PWR_PVDLEVEL_7; 
+//     sConfigPVD.Mode = PWR_PVD_MODE_IT_FALLING; // 电压下降时触发中断
+//     HAL_PWR_ConfigPVD(&sConfigPVD);
+
+//     // 3. 使能 PVD
+//     HAL_PWR_EnablePVD();
+
+//     // 4. 手动开启 NVIC 中断 (PVD 对应的是 EXTI Line 16)
+//     HAL_NVIC_SetPriority(PVD_IRQn, 0, 0);
+//     HAL_NVIC_EnableIRQ(PVD_IRQn);
+// }
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -83,7 +101,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -91,6 +109,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
+  // PVD_Config(); // 配置电压检测功能
 	app_init();
   /* USER CODE END 2 */
 
@@ -145,6 +164,11 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+// void HAL_PWR_PVDCallback(void)
+// {
+//     all_vehicles_to_flash(); // 在电压异常时立即保存数据，防止数据丢失
+// }
 
 /* USER CODE END 4 */
 

@@ -28,4 +28,5 @@ smart_garage/vehicle_info_update.o: ../APP/Src/vehicle_info_update.c \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_tim.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
   ../Drivers/STM32F1xx_HAL_Driver/Inc\stm32f1xx_hal_uart.h \
-  ../APP/Inc\flash_storage.h ../APP/Inc/app.h
+  ../APP/Inc\flash_storage.h ../APP/Inc/app.h ../Peripheral/Inc\oled.h \
+  ../Peripheral/Inc/OLED_Data.h

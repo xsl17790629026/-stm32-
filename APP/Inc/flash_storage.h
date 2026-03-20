@@ -31,6 +31,7 @@ typedef struct {
 uint8_t flash_storage_init(void);
 uint8_t save_one_vehicle_to_flash(VehicleInfo_t *vehicle);
 uint8_t sync_all_vehicles_to_flash(void);
+uint8_t all_vehicles_to_flash(void);
 uint8_t load_vehicle_data_from_flash(uint32_t *flash_address);
 uint8_t erase_vehicle_data_in_flash(void);
 

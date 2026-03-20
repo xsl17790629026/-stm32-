@@ -15,8 +15,8 @@
 #include "RingBuffer.h"
 #include "vehicle_info_update.h"
 #include "interface_uart.h"
+#include "interface_gpio.h"
 
-#define NO_VEHICLE 1
 
 extern UART_HandleTypeDef huart1;
 
@@ -51,12 +51,13 @@ void uart_task(void *arg)
     }
 }
 
-void led_task()
+void led_key_task()
 {
     while (1)
     {
-        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-        vTaskDelay(500);
+        Process_System_Reset_Button();
+
+        vTaskDelay(100);
     }
 }
 /**
@@ -91,7 +92,7 @@ void servo_task()
                 Yellow_LED_Off();
                 vehicle_flag = 1;
             }
-            else if (rx_infrared_state == 2)
+            else if (rx_infrared_state == HAVE_VEHICLE)
             {
                 servo_open();
             }
@@ -109,11 +110,18 @@ void infrared_task()
     {
         if (xSemaphoreTake(xVehicleSemaphore, 0) == pdTRUE)
         {
+            uint8_t cmd = HAVE_VEHICLE; // HAVE_VEHICLE 代表有车状态
+            xQueueSend(xInfraredQueue, &cmd, 0);
             vTaskDelay(5000); // 
+            while(Read_Infrared_State(CGQ2) == HAVE_VEHICLE);
         }
-        uint8_t infrared_state = Read_Infrared_State();
-
-        xQueueSend(xInfraredQueue, &infrared_state, 0);
+        uint8_t infrared_state = Read_Infrared_State(CGQ1);
+        if(infrared_state == NO_VEHICLE)
+        {
+            uint8_t cmd = NO_VEHICLE;
+            xQueueSend(xInfraredQueue, &cmd, 0);
+        }
+        // xQueueSend(xInfraredQueue, &infrared_state, 0);
         vTaskDelay(100); 
     }
 }
@@ -136,6 +144,8 @@ void oled_task()
     OLED_ShowNum(40, 16, 0, 3, OLED_8X16);            // 显示余额
     OLED_ShowNum(110, 16, Empty_place, 2, OLED_8X16); // 显示空位
     OLED_Update();
+
+    // erase_vehicle_data_in_flash();
 
     char last_plate[16] = {0};        // 记录上一次的车牌号
     TickType_t last_process_time = 0; // 记录上一次处理时间
@@ -240,22 +250,23 @@ void oled_task()
                 OLED_Update();
             }
         }
+
         vTaskDelay(10);
     }
 }
 
-void flash_storage_task()
-{
-    flash_storage_init();
-    while(1)
-    {
-        if(g_flash_write_addr >= FLASH_STORAGE_END_ADDR)
-        {
-            erase_vehicle_data_in_flash();
-        }
-        vTaskDelay(100); // 每 10 秒保存一次数据到 Flash
-    }
-}
+// void flash_storage_task()
+// {
+//     flash_storage_init();
+//     while(1)
+//     {
+//         if(g_flash_write_addr >= FLASH_STORAGE_END_ADDR)
+//         {
+//             erase_vehicle_data_in_flash();
+//         }
+//         vTaskDelay(100); // 每 10 秒保存一次数据到 Flash
+//     }
+// }
 
 /* 应用程序入口启动初始化 */
 void app_init(void)
@@ -264,9 +275,10 @@ void app_init(void)
     xVehicleSemaphore = xSemaphoreCreateBinary();
 		
     // HAL_UART_Transmit(&huart1, (uint8_t *)"hello\r\n", 7, 0xFFFF);
-    // printf("flash init start\r\n");
+    // // printf("flash init start\r\n");
+    // printf("flash_vehicles is erased\r\n");
 
-    xTaskCreate(led_task, "led_task", 128, NULL, 1, NULL);
+    xTaskCreate(led_key_task, "led_key_task", 128, NULL, 1, NULL);
     xTaskCreate(uart_task, "uart_task", 128, NULL, 3, NULL);
     xTaskCreate(oled_task, "oled_task", 512, NULL, 1, NULL);
     xTaskCreate(servo_task, "servo_task", 128, NULL, 2, NULL);

@@ -339,7 +339,7 @@
               <MiscControls>-Wno-invalid-source-encoding</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xB</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../FreeRTOS/Source/include;../FreeRTOS/Source/portable/GCC/ARM_CM3;../FreeRTOS;..\APP\Inc;..\Peripheral\Inc;..\..\Smart_Garage;..\CommonTool\Inc;..\MidInterface\Inc</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../FreeRTOS/Source/include;../FreeRTOS/Source/portable/GCC/ARM_CM3;../FreeRTOS;../APP/Inc;../Peripheral/Inc;../../Smart_Garage;../CommonTool/Inc;../MidInterface/Inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

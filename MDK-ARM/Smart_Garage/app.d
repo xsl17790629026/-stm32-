@@ -43,4 +43,5 @@ smart_garage/app.o: ../APP/Src/app.c \
   ../Peripheral/Inc\servo.h ../Peripheral/Inc\infrared.h \
   ../FreeRTOS/Source/include\queue.h ../FreeRTOS/Source/include\semphr.h \
   ../APP/Inc\flash_storage.h ../CommonTool/Inc\RingBuffer.h \
-  ../APP/Inc\vehicle_info_update.h ../MidInterface/Inc\interface_uart.h
+  ../APP/Inc\vehicle_info_update.h ../MidInterface/Inc\interface_uart.h \
+  ../MidInterface/Inc\interface_gpio.h
