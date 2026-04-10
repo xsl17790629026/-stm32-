@@ -16,6 +16,7 @@
 #include "vehicle_info_update.h"
 #include "interface_uart.h"
 #include "interface_gpio.h"
+#include "light_sensor.h"
 
 
 extern UART_HandleTypeDef huart1;
@@ -56,7 +57,7 @@ void led_key_task()
     while (1)
     {
         Process_System_Reset_Button();
-
+        light_sensor_start();
         vTaskDelay(100);
     }
 }
@@ -89,7 +90,7 @@ void servo_task()
                 servo_close();
                 Red_LED_On();
                 Green_LED_Off();
-                Yellow_LED_Off();
+                //Yellow_LED_Off();
                 vehicle_flag = 1;
             }
             else if (rx_infrared_state == HAVE_VEHICLE)
@@ -149,7 +150,7 @@ void oled_task()
 
     char last_plate[16] = {0};        // 记录上一次的车牌号
     TickType_t last_process_time = 0; // 记录上一次处理时间
-
+    uint32_t yellow_time = 0;
     while (1)
     {
         if (Serial_flag)
@@ -221,7 +222,7 @@ void oled_task()
                     xQueueSend(xInfraredQueue, &cmd, 0);
                     Green_LED_On();
                     Red_LED_Off();
-                    Yellow_LED_Off();
+                    //Yellow_LED_Off();
                     OLED_ShowString(0, 48, "Access Granted  ", OLED_8X16);
                     xSemaphoreGive(xVehicleSemaphore);
                 }
@@ -235,6 +236,7 @@ void oled_task()
                     Green_LED_Off();
                     Red_LED_Off();
                     Yellow_LED_On(); // 闪烁
+                    yellow_time = xTaskGetTickCount();
                     OLED_ShowString(0, 48, "Need Recharge!  ", OLED_8X16);
                 }
                 sync_all_vehicles_to_flash();
@@ -250,7 +252,11 @@ void oled_task()
                 OLED_Update();
             }
         }
-
+        if (yellow_time != 0 && (xTaskGetTickCount() - yellow_time) > pdMS_TO_TICKS(5000))
+        {
+            Yellow_LED_Off();
+            yellow_time = 0;
+        }
         vTaskDelay(10);
     }
 }

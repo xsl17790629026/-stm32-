@@ -41,6 +41,7 @@
 "smart_garage\oled.o"
 "smart_garage\oled_data.o"
 "smart_garage\servo.o"
+"smart_garage\light_sensor.o"
 "smart_garage\interface_gpio.o"
 "smart_garage\interface_uart.o"
 "smart_garage\ringbuffer.o"

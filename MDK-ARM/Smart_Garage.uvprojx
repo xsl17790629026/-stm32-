@@ -781,6 +781,11 @@
               <FileType>1</FileType>
               <FilePath>..\Peripheral\Src\servo.c</FilePath>
             </File>
+            <File>
+              <FileName>light_sensor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Peripheral\Src\light_sensor.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

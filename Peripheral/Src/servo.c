@@ -1,7 +1,7 @@
 #include "servo.h"
 
 #define SERVO_MIN    50   // 0°
-#define SERVO_MID   150   // 90°
+#define SERVO_MID   130   // 90°
 #define SERVO_MAX   250   // 180°
 
 extern TIM_HandleTypeDef htim2;
