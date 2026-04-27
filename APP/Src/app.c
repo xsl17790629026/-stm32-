@@ -108,7 +108,7 @@ void servo_task()
 
 void infrared_task()
 {
-    static uint8_t last_infrared_state = HAVE_VEHICLE;
+    //static uint8_t last_infrared_state = HAVE_VEHICLE;
 
     while (1)
     {
@@ -117,20 +117,22 @@ void infrared_task()
             uint8_t cmd = HAVE_VEHICLE; // HAVE_VEHICLE 代表有车状态
             xQueueSend(xInfraredQueue, &cmd, 0);
             vTaskDelay(5000); // 
-            while(Read_Infrared_State(CGQ2) == HAVE_VEHICLE)
+            while(Read_Infrared_State(CGQ2) == HAVE_VEHICLE || Read_Infrared_State(CGQ1) == HAVE_VEHICLE)
             {
                 vTaskDelay(50);
             }
-            last_infrared_state = NO_VEHICLE; // 更新上一次状态
-        }
-        uint8_t current_infrared_state = Read_Infrared_State(CGQ1);
-        if(current_infrared_state == NO_VEHICLE && last_infrared_state == HAVE_VEHICLE)
-        {
-            uint8_t cmd = NO_VEHICLE;
+            // last_infrared_state = NO_VEHICLE; // 更新上一次状态
+            cmd = NO_VEHICLE;
             xQueueSend(xInfraredQueue, &cmd, 0);
         }
-        last_infrared_state = current_infrared_state; // 更新上一次状态
-        // xQueueSend(xInfraredQueue, &infrared_state, 0);
+        // uint8_t current_infrared_state = Read_Infrared_State(CGQ1);
+        // if(current_infrared_state == NO_VEHICLE && last_infrared_state == HAVE_VEHICLE)
+        // {
+        //     uint8_t cmd = NO_VEHICLE;
+        //     xQueueSend(xInfraredQueue, &cmd, 0);
+        // }
+        // last_infrared_state = current_infrared_state; // 更新上一次状态
+        // // xQueueSend(xInfraredQueue, &infrared_state, 0);
         vTaskDelay(100); 
     }
 }
