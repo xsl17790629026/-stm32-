@@ -23,6 +23,7 @@ extern UART_HandleTypeDef huart1;
 
 QueueHandle_t xInfraredQueue;
 SemaphoreHandle_t xVehicleSemaphore;
+TaskHandle_t xInfraredTask = NULL;
 volatile uint8_t vehicle_flag = 1;
 
 uint8_t g_plate_number_buf[32];
@@ -107,6 +108,8 @@ void servo_task()
 
 void infrared_task()
 {
+    static uint8_t last_infrared_state = HAVE_VEHICLE;
+
     while (1)
     {
         if (xSemaphoreTake(xVehicleSemaphore, 0) == pdTRUE)
@@ -114,14 +117,19 @@ void infrared_task()
             uint8_t cmd = HAVE_VEHICLE; // HAVE_VEHICLE 代表有车状态
             xQueueSend(xInfraredQueue, &cmd, 0);
             vTaskDelay(5000); // 
-            while(Read_Infrared_State(CGQ2) == HAVE_VEHICLE);
+            while(Read_Infrared_State(CGQ2) == HAVE_VEHICLE)
+            {
+                vTaskDelay(50);
+            }
+            last_infrared_state = NO_VEHICLE; // 更新上一次状态
         }
-        uint8_t infrared_state = Read_Infrared_State(CGQ1);
-        if(infrared_state == NO_VEHICLE)
+        uint8_t current_infrared_state = Read_Infrared_State(CGQ1);
+        if(current_infrared_state == NO_VEHICLE && last_infrared_state == HAVE_VEHICLE)
         {
             uint8_t cmd = NO_VEHICLE;
             xQueueSend(xInfraredQueue, &cmd, 0);
         }
+        last_infrared_state = current_infrared_state; // 更新上一次状态
         // xQueueSend(xInfraredQueue, &infrared_state, 0);
         vTaskDelay(100); 
     }
@@ -156,8 +164,27 @@ void oled_task()
         if (Serial_flag)
         {
             Serial_flag = 0;
+
             char *current_plate = (char *)g_plate_number_buf;
 
+            if(strcmp(current_plate, "OPEN") == 0)
+            {
+                servo_open();
+                Green_LED_On();
+                Red_LED_Off();
+                Yellow_LED_Off();
+                vTaskSuspend(xInfraredTask); // 暂停红外任务，避免干扰
+                continue;
+            }
+            if(strcmp(current_plate, "CLOSE") == 0)
+            {
+                servo_close();
+                Red_LED_On();
+                Green_LED_Off();
+                Yellow_LED_Off();
+                vTaskResume(xInfraredTask); // 恢复红外任务
+                continue;
+            }
             // ====防止重复处理====
             TickType_t current_time = xTaskGetTickCount();
             if (strcmp(current_plate, last_plate) == 0 && (current_time - last_process_time) < pdMS_TO_TICKS(5000))
@@ -252,6 +279,8 @@ void oled_task()
                 OLED_Update();
             }
         }
+
+
         if (yellow_time != 0 && (xTaskGetTickCount() - yellow_time) > pdMS_TO_TICKS(5000))
         {
             Yellow_LED_Off();
@@ -288,7 +317,7 @@ void app_init(void)
     xTaskCreate(uart_task, "uart_task", 128, NULL, 3, NULL);
     xTaskCreate(oled_task, "oled_task", 512, NULL, 1, NULL);
     xTaskCreate(servo_task, "servo_task", 128, NULL, 2, NULL);
-    xTaskCreate(infrared_task, "infrared_task", 128, NULL, 1, NULL);
+    xTaskCreate(infrared_task, "infrared_task", 128, NULL, 1, &xInfraredTask);
     //xTaskCreate(flash_storage_task, "flash_storage_task", 128, NULL, 1, NULL);
     vTaskStartScheduler();
 }

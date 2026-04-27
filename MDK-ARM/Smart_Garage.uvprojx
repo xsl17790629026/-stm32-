@@ -801,6 +801,11 @@
               <FileType>1</FileType>
               <FilePath>..\MidInterface\Src\interface_uart.c</FilePath>
             </File>
+            <File>
+              <FileName>interface_bule.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\MidInterface\Src\interface_bule.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -9,6 +9,7 @@ extern uint8_t Serial_flag;
 #define FRAME_HEAD2 '@'
 #define FRAME_TAIL  '*'
 
+
 typedef enum {
     WAIT_HEAD1,
     WAIT_HEAD2,

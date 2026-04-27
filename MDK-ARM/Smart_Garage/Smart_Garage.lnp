@@ -44,6 +44,7 @@
 "smart_garage\light_sensor.o"
 "smart_garage\interface_gpio.o"
 "smart_garage\interface_uart.o"
+"smart_garage\interface_bule.o"
 "smart_garage\ringbuffer.o"
 --library_type=microlib --strict --scatter "Smart_Garage\Smart_Garage.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
